@@ -1,6 +1,6 @@
+import products from '@assets/data/products';
+import ProductListItem from '@components/ProductListItem';
 import { StyleSheet, View } from 'react-native';
-import products from '../../../assets/data/products';
-import ProductListItem from '../../components/ProductListItem';
 
 const product = products[0];
 

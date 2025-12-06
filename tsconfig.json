@@ -5,7 +5,16 @@
     "baseUrl": "./",
     "paths": {
       "@/*": [
-        "src/*"
+        "src/*",
+      ],
+      "@assets/*": [
+        "assets/*",
+      ],
+      "@components/*": [
+        "src/components/*",
+      ],
+      "@constants/*": [
+        "src/constants/*",
       ]
     }
   },
