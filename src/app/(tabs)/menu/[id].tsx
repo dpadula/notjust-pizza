@@ -2,13 +2,15 @@ import products from '@assets/data/products';
 import { defaultPizzaImage } from '@components/ProductListItem';
 import Colors from '@constants/Colors';
 import { Stack, useLocalSearchParams } from 'expo-router';
-import React from 'react';
+import React, { useState } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 
 const sizes = ['S', 'M', 'L', 'XL'];
 
 const ProductDetailScreen = () => {
   const { id } = useLocalSearchParams();
+
+  const [selectedSize, setSelectedSize] = useState(sizes[0]);
 
   const product = products.find((p) => p.id.toString() === id);
   if (!product) {
@@ -29,7 +31,16 @@ const ProductDetailScreen = () => {
       <Text style={styles.title}>Select Size</Text>
       <View style={styles.sizes}>
         {sizes.map((size) => (
-          <View key={size} style={styles.size}>
+          <View
+            key={size}
+            style={[
+              styles.size,
+              {
+                backgroundColor: selectedSize === size ? 'gainsboro' : 'white',
+              },
+            ]}
+            onTouchEnd={() => setSelectedSize(size)}
+          >
             <Text style={styles.sizeText}>{size}</Text>
           </View>
         ))}
