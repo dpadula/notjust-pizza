@@ -3,7 +3,8 @@ import { defaultPizzaImage } from '@components/ProductListItem';
 import Colors from '@constants/Colors';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import Button from '../../../components/Button';
 
 const sizes = ['S', 'M', 'L', 'XL'];
 
@@ -20,6 +21,10 @@ const ProductDetailScreen = () => {
       </View>
     );
   }
+  function addToCart(): void {
+    console.log(`Added ${product?.name} of size ${selectedSize} to cart.`);
+  }
+
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: product?.name }} />
@@ -31,7 +36,7 @@ const ProductDetailScreen = () => {
       <Text style={styles.title}>Select Size</Text>
       <View style={styles.sizes}>
         {sizes.map((size) => (
-          <View
+          <Pressable
             key={size}
             style={[
               styles.size,
@@ -39,7 +44,7 @@ const ProductDetailScreen = () => {
                 backgroundColor: selectedSize === size ? 'gainsboro' : 'white',
               },
             ]}
-            onTouchEnd={() => setSelectedSize(size)}
+            onPress={() => setSelectedSize(size)}
           >
             <Text
               style={[
@@ -51,10 +56,11 @@ const ProductDetailScreen = () => {
             >
               {size}
             </Text>
-          </View>
+          </Pressable>
         ))}
       </View>
       <Text style={styles.price}>${product.price}</Text>
+      <Button text='Add to Cart' onPress={addToCart} />
     </View>
   );
 };
@@ -87,6 +93,7 @@ const styles = StyleSheet.create({
   sizes: {
     flexDirection: 'row',
     justifyContent: 'space-around',
+    marginVertical: 10,
   },
   size: {
     borderWidth: 0.4,
