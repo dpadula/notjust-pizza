@@ -27,6 +27,7 @@ export default ProductListItem;
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: Colors.light.background,
     padding: 10,
     borderRadius: 20,
