@@ -5,6 +5,8 @@ import { Stack, useLocalSearchParams } from 'expo-router';
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 
+const sizes = ['S', 'M', 'L', 'XL'];
+
 const ProductDetailScreen = () => {
   const { id } = useLocalSearchParams();
 
@@ -24,7 +26,14 @@ const ProductDetailScreen = () => {
         style={styles.image}
         resizeMode='contain'
       />
-      <Text style={styles.title}>{product.name}</Text>
+      <Text style={styles.title}>Select Size</Text>
+      <View style={styles.sizes}>
+        {sizes.map((size) => (
+          <View key={size} style={styles.size}>
+            <Text style={styles.sizeText}>{size}</Text>
+          </View>
+        ))}
+      </View>
       <Text style={styles.price}>${product.price}</Text>
     </View>
   );
@@ -54,5 +63,24 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     color: Colors.light.tint,
+  },
+  sizes: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  size: {
+    borderWidth: 0.4,
+    borderColor: 'gray',
+    backgroundColor: 'gainsboro',
+    width: 60,
+    aspectRatio: 1,
+    padding: 10,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  sizeText: {
+    fontSize: 16,
+    fontWeight: '500',
   },
 });
