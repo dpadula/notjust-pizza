@@ -41,7 +41,16 @@ const ProductDetailScreen = () => {
             ]}
             onTouchEnd={() => setSelectedSize(size)}
           >
-            <Text style={styles.sizeText}>{size}</Text>
+            <Text
+              style={[
+                styles.sizeText,
+                {
+                  color: selectedSize === size ? 'black' : 'gray',
+                },
+              ]}
+            >
+              {size}
+            </Text>
           </View>
         ))}
       </View>
