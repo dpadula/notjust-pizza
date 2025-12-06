@@ -27,8 +27,15 @@ export default function TabLayout() {
         headerShown: useClientOnlyValue(false, true),
       }}
     >
+      {/* Con esto evitamos que el tab "index" aparezca en la barra de tabs */}
       <Tabs.Screen
         name='index'
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name='menu'
         options={{
           title: 'Menu',
           tabBarIcon: ({ color }) => (
