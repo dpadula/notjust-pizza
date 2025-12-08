@@ -1,14 +1,11 @@
 import { useCart } from '@/providers/CartProviderContext';
 import { PizzaSize } from '@/types';
 import products from '@assets/data/products';
-import Button from '@components/Button';
 import { defaultPizzaImage } from '@components/ProductListItem';
 import Colors from '@constants/Colors';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
-
-const sizes: PizzaSize[] = ['S', 'M', 'L', 'XL'];
+import { Image, StyleSheet, Text, View } from 'react-native';
 
 const ProductDetailScreen = () => {
   const { id } = useLocalSearchParams();
@@ -41,34 +38,9 @@ const ProductDetailScreen = () => {
         style={styles.image}
         resizeMode='contain'
       />
-      <Text style={styles.title}>Select Size</Text>
-      <View style={styles.sizes}>
-        {sizes.map((size) => (
-          <Pressable
-            key={size}
-            style={[
-              styles.size,
-              {
-                backgroundColor: selectedSize === size ? 'gainsboro' : 'white',
-              },
-            ]}
-            onPress={() => setSelectedSize(size)}
-          >
-            <Text
-              style={[
-                styles.sizeText,
-                {
-                  color: selectedSize === size ? 'black' : 'gray',
-                },
-              ]}
-            >
-              {size}
-            </Text>
-          </Pressable>
-        ))}
-      </View>
+
+      <Text style={styles.title}>{product.name}</Text>
       <Text style={styles.price}>${product.price}</Text>
-      <Button text='Add to Cart' onPress={addToCart} />
     </View>
   );
 };
@@ -97,25 +69,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     color: Colors.light.tint,
-  },
-  sizes: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginVertical: 10,
-  },
-  size: {
-    borderWidth: 0.4,
-    borderColor: 'gray',
-    backgroundColor: 'gainsboro',
-    width: 60,
-    aspectRatio: 1,
-    padding: 10,
-    borderRadius: 25,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  sizeText: {
-    fontSize: 16,
-    fontWeight: '500',
   },
 });
