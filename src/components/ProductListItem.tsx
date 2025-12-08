@@ -1,6 +1,6 @@
 import { Product } from '@/types';
 import Colors from '@constants/Colors';
-import { Link } from 'expo-router';
+import { Link, useSegments } from 'expo-router';
 import React from 'react';
 import { Image, Pressable, StyleSheet, Text } from 'react-native';
 
@@ -12,8 +12,11 @@ type ProductListItemProps = {
 };
 
 const ProductListItem = ({ product }: ProductListItemProps) => {
+  const segments = useSegments(); //Para saber en que layout estamos (admin o user). Se ve que no hace falta en expo-router v6
+
+  console.log('Current segments:', segments);
   return (
-    <Link href={`/menu/${product.id}`} asChild>
+    <Link href={`/${segments[0]}/menu/${product.id}` as any} asChild>
       <Pressable style={styles.container}>
         <Image
           source={{ uri: product.image || defaultPizzaImage }}
