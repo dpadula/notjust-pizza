@@ -14,7 +14,7 @@ type ProductListItemProps = {
 const ProductListItem = ({ product }: ProductListItemProps) => {
   const segments = useSegments(); //Para saber en que layout estamos (admin o user). Se ve que no hace falta en expo-router v6
 
-  console.log('Current segments:', segments);
+  // console.log('Current segments:', segments);
   return (
     <Link href={`/${segments[0]}/menu/${product.id}` as any} asChild>
       <Pressable style={styles.container}>
