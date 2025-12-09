@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Image, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, Image, StyleSheet, Text, TextInput, View } from 'react-native';
 // import { defaultPizzaImage } from '@/constants/Images';
 import Button from '@/components/Button';
 import { defaultPizzaImage } from '@/components/ProductListItem';
 import Colors from '@/constants/Colors';
 import * as ImagePicker from 'expo-image-picker';
-import { Stack, useRouter } from 'expo-router';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
 const CreateScreen = () => {
   const [image, setImage] = useState<string | null>(null);
@@ -14,6 +14,10 @@ const CreateScreen = () => {
   const [errors, setErrors] = useState('');
 
   const router = useRouter();
+
+  const { id } = useLocalSearchParams();
+
+  const isUpdating = !!id;
 
   const validateInput = () => {
     setErrors('');
@@ -32,6 +36,26 @@ const CreateScreen = () => {
     return true;
   };
 
+  const onSubmit = () => {
+    if (isUpdating) {
+      onUpdate();
+    } else {
+      onCreate();
+    }
+  };
+
+  const onUpdate = () => {
+    if (!validateInput()) {
+      return;
+    }
+
+    console.warn('Updating dish');
+    setName('');
+    setPrice('');
+    setImage('');
+    router.back();
+  };
+
   const onCreate = () => {
     if (!validateInput()) {
       return;
@@ -42,6 +66,23 @@ const CreateScreen = () => {
     setPrice('');
     setImage('');
     router.back();
+  };
+
+  const onDelete = () => {
+    console.warn('Deleting dish');
+    router.back();
+  };
+
+  const confirmDelete = () => {
+    // In real app, show confirmation dialog
+    Alert.alert(
+      'Delete Product',
+      'Are you sure you want to delete this product?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Delete', style: 'destructive', onPress: onDelete },
+      ]
+    );
   };
 
   const pickImage = async () => {
@@ -62,7 +103,9 @@ const CreateScreen = () => {
   };
   return (
     <View style={styles.container}>
-      <Stack.Screen options={{ title: 'Create Product' }} />
+      <Stack.Screen
+        options={{ title: isUpdating ? 'Update Product' : 'Create Product' }}
+      />
       <Image
         source={{ uri: image || defaultPizzaImage }}
         style={styles.image}
@@ -89,7 +132,12 @@ const CreateScreen = () => {
         keyboardType='numeric'
       />
       <Text style={styles.error}>{errors}</Text>
-      <Button onPress={onCreate} text='Create' />
+      <Button onPress={onSubmit} text={isUpdating ? 'Update' : 'Create'} />
+      {isUpdating && (
+        <Text onPress={confirmDelete} style={styles.textButton}>
+          Delete
+        </Text>
+      )}
     </View>
   );
 };
