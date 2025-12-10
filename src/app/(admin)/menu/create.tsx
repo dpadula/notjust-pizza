@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Alert, Image, StyleSheet, Text, TextInput, View } from 'react-native';
 // import { defaultPizzaImage } from '@/constants/Images';
+import { useInsertProduct } from '@/api/products';
 import Button from '@/components/Button';
 import { defaultPizzaImage } from '@/components/ProductListItem';
 import Colors from '@/constants/Colors';
@@ -18,6 +19,13 @@ const CreateScreen = () => {
   const { id } = useLocalSearchParams();
 
   const isUpdating = !!id;
+
+  const { mutate: insertProduct } = useInsertProduct();
+
+  const resetFields = () => {
+    setName('');
+    setPrice('');
+  };
 
   const validateInput = () => {
     setErrors('');
@@ -50,9 +58,6 @@ const CreateScreen = () => {
     }
 
     console.warn('Updating dish');
-    setName('');
-    setPrice('');
-    setImage('');
     router.back();
   };
 
@@ -61,11 +66,19 @@ const CreateScreen = () => {
       return;
     }
 
-    console.warn('Creating dish');
-    setName('');
-    setPrice('');
-    setImage('');
-    router.back();
+    insertProduct(
+      {
+        name,
+        image,
+        price: parseFloat(price),
+      },
+      {
+        onSuccess: () => {
+          resetFields();
+          router.back();
+        },
+      }
+    );
   };
 
   const onDelete = () => {
