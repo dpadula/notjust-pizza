@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, Image, StyleSheet, Text, TextInput, View } from 'react-native';
 // import { defaultPizzaImage } from '@/constants/Images';
-import { useInsertProduct } from '@/api/products';
+import {
+  useDeleteProduct,
+  useInsertProduct,
+  useProduct,
+  useUpdateProduct,
+} from '@/api/products';
 import Button from '@/components/Button';
 import { defaultPizzaImage } from '@/components/ProductListItem';
 import Colors from '@/constants/Colors';
@@ -16,11 +21,26 @@ const CreateScreen = () => {
 
   const router = useRouter();
 
-  const { id } = useLocalSearchParams();
+  const { id: idString } = useLocalSearchParams();
+  const id = parseFloat(
+    typeof idString === 'string' ? idString : idString?.[0]
+  );
 
   const isUpdating = !!id;
 
   const { mutate: insertProduct } = useInsertProduct();
+  const { mutate: updateProduct } = useUpdateProduct();
+  const { data: updatingProduct } = useProduct(id);
+  const { mutate: deleteProduct } = useDeleteProduct();
+
+  // Esto es para obtener los detalles del producto que se esta actualizando
+  useEffect(() => {
+    if (updatingProduct) {
+      setName(updatingProduct.name);
+      setPrice(updatingProduct.price.toString());
+      setImage(updatingProduct.image);
+    }
+  }, [updatingProduct]);
 
   const resetFields = () => {
     setName('');
@@ -57,8 +77,18 @@ const CreateScreen = () => {
       return;
     }
 
-    console.warn('Updating dish');
-    router.back();
+    // const imagePath = await uploadImage();
+
+    updateProduct(
+      { id, name, price: parseFloat(price), image },
+      // { id, name, price: parseFloat(price), image: imagePath },
+      {
+        onSuccess: () => {
+          resetFields();
+          router.back();
+        },
+      }
+    );
   };
 
   const onCreate = () => {
@@ -82,8 +112,12 @@ const CreateScreen = () => {
   };
 
   const onDelete = () => {
-    console.warn('Deleting dish');
-    router.back();
+    deleteProduct(id, {
+      onSuccess: () => {
+        resetFields();
+        router.replace('/(admin)');
+      },
+    });
   };
 
   const confirmDelete = () => {
