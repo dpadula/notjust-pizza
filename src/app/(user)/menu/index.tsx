@@ -1,5 +1,4 @@
 import { supabase } from '@/lib/supabase';
-import products from '@assets/data/products';
 import ProductListItem from '@components/ProductListItem';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -26,7 +25,11 @@ export default function MenuScreen() {
   //   };
   // }, []);
 
-  const { data, error, isLoading } = useQuery({
+  const {
+    data: products,
+    error,
+    isLoading,
+  } = useQuery({
     queryKey: ['products'],
     queryFn: async () => {
       // Simulate a fetch call
