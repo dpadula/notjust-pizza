@@ -10,7 +10,7 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "gen-types": "npx supabase gen types typescript --project-id ktobgrzfunjocnesablz --schema public > src/types/supabase.ts"
+    "gen-types": "npx supabase gen types typescript --project-id toywvzkotolwqnzcnmxz --schema public > src/database.types.ts"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
