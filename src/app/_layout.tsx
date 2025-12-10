@@ -5,13 +5,14 @@ import {
   ThemeProvider,
 } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+import { Redirect, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/components/useColorScheme';
 import CartProvider from '@/providers/CartProviderContext';
+import AuthProvider, { useAuth } from '../providers/AuthProvider';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -31,6 +32,13 @@ export default function RootLayout() {
     SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),
     ...FontAwesome.font,
   });
+
+  const { session } = useAuth();
+
+  if (session) {
+    // If the user is authenticated, redirect to the main app
+    return <Redirect href='/' />;
+  }
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
@@ -55,15 +63,17 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <CartProvider>
-        <Stack>
-          <Stack.Screen name='index' />
-          <Stack.Screen name='(user)' options={{ headerShown: false }} />
-          <Stack.Screen name='(admin)' options={{ headerShown: false }} />
-          <Stack.Screen name='(auth)' options={{ headerShown: false }} />
-          <Stack.Screen name='cart' options={{ presentation: 'modal' }} />
-        </Stack>
-      </CartProvider>
+      <AuthProvider>
+        <CartProvider>
+          <Stack>
+            <Stack.Screen name='index' />
+            <Stack.Screen name='(user)' options={{ headerShown: false }} />
+            <Stack.Screen name='(admin)' options={{ headerShown: false }} />
+            <Stack.Screen name='(auth)' options={{ headerShown: false }} />
+            <Stack.Screen name='cart' options={{ presentation: 'modal' }} />
+          </Stack>
+        </CartProvider>
+      </AuthProvider>
     </ThemeProvider>
   );
 }
