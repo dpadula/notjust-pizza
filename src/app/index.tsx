@@ -6,7 +6,7 @@ import { ActivityIndicator, View } from 'react-native';
 import Button from '../components/Button';
 
 const index = () => {
-  const { session, loading } = useAuth();
+  const { session, loading, isAdmin } = useAuth();
 
   if (loading) {
     return <ActivityIndicator />;
@@ -14,6 +14,10 @@ const index = () => {
 
   if (!session) {
     return <Redirect href={'/sign-in'} />;
+  }
+
+  if (!isAdmin) {
+    return <Redirect href={'/(user)'} />;
   }
 
   return (
@@ -24,11 +28,6 @@ const index = () => {
       <Link href={'/(admin)'} asChild>
         <Button text='Admin' />
       </Link>
-      {!session && (
-        <Link href={'/sign-in'} asChild>
-          <Button text='Sign in' />
-        </Link>
-      )}
       {session && (
         <Button
           text='Sign out'
