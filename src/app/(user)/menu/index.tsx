@@ -1,6 +1,4 @@
-import { supabase } from '@/lib/supabase';
 import ProductListItem from '@components/ProductListItem';
-import { useQuery } from '@tanstack/react-query';
 import {
   ActivityIndicator,
   FlatList,
@@ -8,41 +6,10 @@ import {
   Text,
   View,
 } from 'react-native';
+import { useProductList } from '../../../api/products';
 
 export default function MenuScreen() {
-  // useEffect(() => {
-  //   const fetchProducts = async () => {
-  //     // Simulate a fetch call
-  //     console.log('Fetching products...');
-  //     const { data, error } = await supabase.from('products').select('*');
-  //     console.log('🚀 ~ fetchProducts ~ error:', error);
-  //     console.log('🚀 ~ fetchProducts ~ data:', data);
-  //   };
-
-  //   fetchProducts();
-  //   return () => {
-  //     console.log('MenuScreen unmounted');
-  //   };
-  // }, []);
-
-  const {
-    data: products,
-    error,
-    isLoading,
-  } = useQuery({
-    queryKey: ['products'],
-    queryFn: async () => {
-      // Simulate a fetch call
-      console.log('Fetching products...');
-      const { data, error } = await supabase.from('products').select('*');
-
-      if (error) {
-        console.log('🚀 ~ fetchProducts ~ error:', error);
-        throw error;
-      }
-      return data;
-    },
-  });
+  const { data: products, error, isLoading } = useProductList();
 
   if (isLoading) {
     return <ActivityIndicator />;
