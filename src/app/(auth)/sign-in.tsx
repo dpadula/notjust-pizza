@@ -14,11 +14,12 @@ const SignInScreen = () => {
   async function signInWithEmail() {
     console.log('Signin', email, password);
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error, data } = await supabase.auth.signInWithPassword({
       email: email,
       password: password,
     });
 
+    console.log('data', data);
     if (error) Alert.alert(error.message);
     setLoading(false);
   }
