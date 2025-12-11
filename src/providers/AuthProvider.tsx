@@ -28,6 +28,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log('AuthProvider mounted');
     const fetchSession = async () => {
       const {
         data: { session },

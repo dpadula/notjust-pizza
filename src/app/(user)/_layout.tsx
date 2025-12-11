@@ -55,7 +55,7 @@ export default function TabLayout() {
         name='signout'
         options={{
           headerShown: false,
-          title: 'SignOut',
+          title: 'Sign out',
           tabBarIcon: ({ color }) => (
             <TabBarIcon name='sign-out' color={color} />
           ),
