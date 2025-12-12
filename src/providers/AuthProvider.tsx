@@ -8,9 +8,19 @@ import {
   useState,
 } from 'react';
 
+type Profile = {
+  avatar_url: string | null;
+  full_name: string | null;
+  group: string;
+  id: string;
+  updated_at: string | null;
+  username: string | null;
+  website: string | null;
+};
+
 type AuthData = {
   session: Session | null;
-  profile: any;
+  profile: Profile | null;
   loading: boolean;
   isAdmin: boolean;
 };
@@ -24,19 +34,38 @@ const AuthContext = createContext<AuthData>({
 
 export default function AuthProvider({ children }: PropsWithChildren) {
   const [session, setSession] = useState<Session | null>(null);
-  const [profile, setProfile] = useState(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+  console.log('🚀 ~ AuthProvider ~ isAdmin:', isAdmin);
 
   useEffect(() => {
-    console.log('AuthProvider mounted');
+    setIsAdmin(profile?.group === 'ADMIN');
+    setLoading(false);
+  }, [profile]);
+
+  useEffect(() => {
     const fetchSession = async () => {
       const {
         data: { session },
       } = await supabase.auth.getSession();
 
       setSession(session);
-      console.log('🚀 ~ fetchSession ~ session:', session);
 
+      if (session) {
+        const { data } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .single();
+
+        setProfile(data || null);
+      }
+    };
+
+    fetchSession();
+    supabase.auth.onAuthStateChange(async (_event, session) => {
+      setSession(session);
       if (session) {
         // fetch profile
         const { data } = await supabase
@@ -45,22 +74,12 @@ export default function AuthProvider({ children }: PropsWithChildren) {
           .eq('id', session.user.id)
           .single();
         setProfile(data || null);
-        console.log('🚀 ~ fetchSession ~ data:', data);
       }
-
-      setLoading(false);
-    };
-
-    fetchSession();
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
     });
   }, []);
 
   return (
-    <AuthContext.Provider
-      value={{ session, loading, profile, isAdmin: profile?.group === 'ADMIN' }}
-    >
+    <AuthContext.Provider value={{ session, loading, profile, isAdmin }}>
       {children}
     </AuthContext.Provider>
   );

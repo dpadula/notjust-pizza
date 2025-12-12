@@ -18,8 +18,7 @@ export default function TabLayout() {
   const { isAdmin } = useAuth();
 
   if (!isAdmin) {
-    // If the user is authenticated, redirect to the main app
-    return <Redirect href='/' />;
+    return <Redirect href={'/'} />;
   }
   return (
     <Tabs

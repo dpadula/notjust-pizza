@@ -4,24 +4,22 @@ import { supabase } from '@/lib/supabase';
 import { Link, Stack } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useAuth } from '../../providers/AuthProvider';
 
 const SignInScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const [loading, setLoading] = useState(false);
+  const { loading } = useAuth();
 
   async function signInWithEmail() {
     console.log('Signin', email, password);
-    setLoading(true);
     const { error, data } = await supabase.auth.signInWithPassword({
       email: email,
       password: password,
     });
 
-    console.log('data', data);
     if (error) Alert.alert(error.message);
-    setLoading(false);
   }
 
   return (

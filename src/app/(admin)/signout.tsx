@@ -21,7 +21,6 @@ const signout = () => {
       <Button
         text='Sign out'
         onPress={() => {
-          console.log('ADMIN');
           supabase.auth.signOut();
         }}
       />
