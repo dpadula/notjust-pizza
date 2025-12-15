@@ -12,7 +12,7 @@ import 'react-native-reanimated';
 
 import { useColorScheme } from '@/components/useColorScheme';
 import AuthProvider, { useAuth } from '@/providers/AuthProvider';
-import CartProvider from '@/providers/CartProviderContext';
+import CartProvider from '@/providers/CartProvider';
 import QueryProvider from '@/providers/QueryProvider';
 
 export {

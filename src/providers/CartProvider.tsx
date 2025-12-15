@@ -9,6 +9,7 @@ type CartContextType = {
   addItem: (product: Product, size: CartItem['size']) => void;
   updateQuantity: (itemId: string, delta: 1 | -1) => void;
   total: number;
+  checkout: () => void;
 };
 
 const CartContext = createContext<CartContextType>({
@@ -16,6 +17,7 @@ const CartContext = createContext<CartContextType>({
   addItem: () => {},
   updateQuantity: () => {},
   total: 0,
+  checkout: () => {},
 });
 
 const CartProvider = ({ children }: PropsWithChildren) => {
@@ -54,7 +56,12 @@ const CartProvider = ({ children }: PropsWithChildren) => {
     (sum, item) => (sum += item.product.price * item.quantity),
     0
   );
-  const cart = { items, addItem, updateQuantity, total }; // Aquí iría la lógica para manejar el carrito
+
+  const checkout = () => {
+    console.log('Checkout not implemented yet');
+  };
+
+  const cart = { items, addItem, updateQuantity, total, checkout }; // Aquí iría la lógica para manejar el carrito
   return <CartContext.Provider value={cart}>{children}</CartContext.Provider>;
 };
 export const useCart = () => {

@@ -1,4 +1,4 @@
-import { useCart } from '@/providers/CartProviderContext';
+import { useCart } from '@/providers/CartProvider';
 import { FontAwesome } from '@expo/vector-icons';
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';

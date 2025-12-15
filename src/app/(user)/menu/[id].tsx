@@ -1,5 +1,5 @@
 import { useProduct } from '@/api/products';
-import { useCart } from '@/providers/CartProviderContext';
+import { useCart } from '@/providers/CartProvider';
 import { PizzaSize } from '@/types';
 import Button from '@components/Button';
 import { defaultPizzaImage } from '@components/ProductListItem';
