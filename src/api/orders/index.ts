@@ -2,11 +2,17 @@ import { supabase } from '@/lib/supabase';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../../providers/AuthProvider';
 
-export const useAdminOrderstList = () => {
+export const useAdminOrderstList = ({ archived = false }) => {
+  const statuses = archived
+    ? ['Delivered', 'Canceled']
+    : ['New', 'Cooking', 'Delivering'];
   return useQuery({
-    queryKey: ['orders'],
+    queryKey: ['orders', { archived }],
     queryFn: async () => {
-      const { data, error } = await supabase.from('orders').select('*');
+      const { data, error } = await supabase
+        .from('orders')
+        .select('*')
+        .in('status', statuses);
       if (error) {
         throw new Error(error.message);
       }

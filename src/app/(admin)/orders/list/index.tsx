@@ -9,7 +9,11 @@ import {
 } from 'react-native';
 
 export default function OrdersScreen() {
-  const { data: orders, isLoading, error } = useAdminOrderstList();
+  const {
+    data: orders,
+    isLoading,
+    error,
+  } = useAdminOrderstList({ archived: false });
 
   if (isLoading) {
     return <ActivityIndicator />;

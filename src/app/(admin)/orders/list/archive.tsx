@@ -1,9 +1,28 @@
+import { useAdminOrderstList } from '@/api/orders';
 import OrderListItem from '@/components/OrderListItem';
-import orders from '@assets/data/orders';
 import { Stack } from 'expo-router';
-import { FlatList, StyleSheet, View } from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
 export default function ArchiveOrdersScreen() {
+  const {
+    data: orders,
+    isLoading,
+    error,
+  } = useAdminOrderstList({ archived: true });
+
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
+
+  if (error) {
+    return <Text>Failed to fetch products: {error.message}</Text>;
+  }
   return (
     <View>
       <Stack.Screen options={{ title: 'Archive' }} />
