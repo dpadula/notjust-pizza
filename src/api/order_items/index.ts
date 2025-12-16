@@ -17,8 +17,5 @@ export const useInsertOrderItems = () => {
       }
       return newOrder;
     },
-    async onSuccess() {
-      await queryClient.invalidateQueries({ queryKey: ['order_items'] });
-    },
   });
 };

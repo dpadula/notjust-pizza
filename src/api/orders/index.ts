@@ -13,7 +13,8 @@ export const useAdminOrderstList = ({ archived = false }) => {
       const { data, error } = await supabase
         .from('orders')
         .select('*')
-        .in('status', statuses);
+        .in('status', statuses)
+        .order('created_at', { ascending: false });
       if (error) {
         throw new Error(error.message);
       }
@@ -32,7 +33,9 @@ export const useMyOrderstList = () => {
       const { data, error } = await supabase
         .from('orders')
         .select('*')
-        .eq('user_id', userId);
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false });
+
       if (error) {
         throw new Error(error.message);
       }
