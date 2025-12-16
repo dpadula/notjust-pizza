@@ -1,5 +1,7 @@
+import { useInsertOrder } from '@/api/orders';
 import { CartItem, Tables } from '@/types';
 import { randomUUID } from 'expo-crypto';
+import { useRouter } from 'expo-router';
 import { createContext, PropsWithChildren, useContext, useState } from 'react';
 
 type Product = Tables<'products'>;
@@ -22,6 +24,10 @@ const CartContext = createContext<CartContextType>({
 
 const CartProvider = ({ children }: PropsWithChildren) => {
   const [items, setItems] = useState<CartItem[]>([]);
+
+  const { mutate: insertOrder } = useInsertOrder();
+
+  const router = useRouter();
 
   const addItem = (product: Product, size: CartItem['size']) => {
     const existingItem = items.find(
@@ -57,8 +63,27 @@ const CartProvider = ({ children }: PropsWithChildren) => {
     0
   );
 
+  const clearCart = () => {
+    setItems([]);
+  };
+
   const checkout = () => {
-    console.log('Checkout not implemented yet');
+    insertOrder(
+      {
+        total,
+        user_id: '',
+      },
+      {
+        onSuccess: (data) => {
+          console.log('🚀 ~ checkout ~ data:', data);
+          clearCart();
+          router.push(`/(user)/orders/${data.id}`);
+        },
+        onError: (error) => {
+          console.error('Checkout failed:', error);
+        },
+      }
+    );
   };
 
   const cart = { items, addItem, updateQuantity, total, checkout }; // Aquí iría la lógica para manejar el carrito

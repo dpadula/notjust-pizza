@@ -37,7 +37,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
-  console.log('🚀 ~ AuthProvider ~ isAdmin:', isAdmin);
+  // console.log('🚀 ~ AuthProvider ~ isAdmin:', isAdmin);
 
   useEffect(() => {
     setIsAdmin(profile?.group === 'ADMIN');
