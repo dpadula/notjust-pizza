@@ -71,16 +71,21 @@ const CartProvider = ({ children }: PropsWithChildren) => {
 
   const saveOrderItems = (order: Tables<'orders'>) => {
     // console.log('🚀 ~ checkout ~ data:', order);
-
-    const item1 = items[0]; //Prueba para un solo item
-    insertOrderItems({
+    const orderItems = items.map((cartItem) => ({
       order_id: order.id,
-      product_id: item1.product_id,
-      size: item1.size,
-      quantity: item1.quantity,
+      product_id: cartItem.product_id,
+      size: cartItem.size,
+      quantity: cartItem.quantity,
+    }));
+    insertOrderItems(orderItems, {
+      onSuccess: () => {
+        clearCart();
+        router.push(`/(user)/orders/${order.id}`);
+      },
+      onError: (error) => {
+        console.error('Failed to save order items:', error);
+      },
     });
-    clearCart();
-    router.push(`/(user)/orders/${order.id}`);
   };
 
   const checkout = () => {
