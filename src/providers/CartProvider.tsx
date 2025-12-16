@@ -3,6 +3,7 @@ import { CartItem, Tables } from '@/types';
 import { randomUUID } from 'expo-crypto';
 import { useRouter } from 'expo-router';
 import { createContext, PropsWithChildren, useContext, useState } from 'react';
+import { useInsertOrderItems } from '../api/order_items';
 
 type Product = Tables<'products'>;
 
@@ -26,6 +27,7 @@ const CartProvider = ({ children }: PropsWithChildren) => {
   const [items, setItems] = useState<CartItem[]>([]);
 
   const { mutate: insertOrder } = useInsertOrder();
+  const { mutate: insertOrderItems } = useInsertOrderItems();
 
   const router = useRouter();
 
@@ -67,6 +69,20 @@ const CartProvider = ({ children }: PropsWithChildren) => {
     setItems([]);
   };
 
+  const saveOrderItems = (order: Tables<'orders'>) => {
+    // console.log('🚀 ~ checkout ~ data:', order);
+
+    const item1 = items[0]; //Prueba para un solo item
+    insertOrderItems({
+      order_id: order.id,
+      product_id: item1.product_id,
+      size: item1.size,
+      quantity: item1.quantity,
+    });
+    clearCart();
+    router.push(`/(user)/orders/${order.id}`);
+  };
+
   const checkout = () => {
     insertOrder(
       {
@@ -75,9 +91,7 @@ const CartProvider = ({ children }: PropsWithChildren) => {
       },
       {
         onSuccess: (data) => {
-          console.log('🚀 ~ checkout ~ data:', data);
-          clearCart();
-          router.push(`/(user)/orders/${data.id}`);
+          saveOrderItems(data);
         },
         onError: (error) => {
           console.error('Checkout failed:', error);
@@ -89,6 +103,7 @@ const CartProvider = ({ children }: PropsWithChildren) => {
   const cart = { items, addItem, updateQuantity, total, checkout }; // Aquí iría la lógica para manejar el carrito
   return <CartContext.Provider value={cart}>{children}</CartContext.Provider>;
 };
+
 export const useCart = () => {
   return useContext(CartContext);
 };
