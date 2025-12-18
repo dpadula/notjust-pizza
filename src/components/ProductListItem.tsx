@@ -19,11 +19,6 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
   return (
     <Link href={`/${segments[0]}/menu/${product.id}` as any} asChild>
       <Pressable style={styles.container}>
-        {/* <Image
-          source={{ uri: product.image || defaultPizzaImage }}
-          style={styles.image}
-          resizeMode='contain'
-        /> */}
         <RemoteImage
           path={product.image || undefined}
           fallback={defaultPizzaImage}

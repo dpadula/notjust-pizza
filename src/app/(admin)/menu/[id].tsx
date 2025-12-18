@@ -6,13 +6,13 @@ import { Link, Stack, useLocalSearchParams } from 'expo-router';
 import React from 'react';
 import {
   ActivityIndicator,
-  Image,
   Pressable,
   StyleSheet,
   Text,
   useColorScheme,
   View,
 } from 'react-native';
+import RemoteImage from '../../../components/RemoteImage';
 
 const ProductDetailScreen = () => {
   const { id: idString } = useLocalSearchParams();
@@ -58,8 +58,10 @@ const ProductDetailScreen = () => {
           ),
         }}
       />
-      <Image
-        source={{ uri: product.image || defaultPizzaImage }}
+
+      <RemoteImage
+        path={product.image || undefined}
+        fallback={defaultPizzaImage}
         style={styles.image}
         resizeMode='contain'
       />

@@ -8,12 +8,12 @@ import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
   ActivityIndicator,
-  Image,
   Pressable,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
+import RemoteImage from '../../../components/RemoteImage';
 
 const sizes: PizzaSize[] = ['S', 'M', 'L', 'XL'];
 
@@ -54,8 +54,9 @@ const ProductDetailScreen = () => {
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: product?.name }} />
-      <Image
-        source={{ uri: product.image || defaultPizzaImage }}
+      <RemoteImage
+        path={product.image || undefined}
+        fallback={defaultPizzaImage}
         style={styles.image}
         resizeMode='contain'
       />
